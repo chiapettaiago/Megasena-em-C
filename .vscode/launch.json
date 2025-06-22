@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/iago/Megasena-em-C/megacena em C",
-      "program": "/home/iago/Megasena-em-C/megacena em C/build/Debug/outDebug",
+      "cwd": "/home/iago/Megasena-em-C",
+      "program": "/home/iago/Megasena-em-C/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
