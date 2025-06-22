@@ -1,60 +1,73 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <ctype.h>
-#include "megasena.h"
+#include <stdio.h>    // Para usar printf e scanf
+#include <stdlib.h>   // Para usar system e rand
+#include <time.h>     // Para usar time e inicializar a semente do rand
+#include <ctype.h>    // Para usar toupper
+#include "megasena.h" // Meu arquivo de cabeçalho com funções da mega sena
 
-// Menu de opções para o usuário
+// Meu primeiro programa grande em C!
+
+// Menu de opções para o usuário - aprendi sobre enums na aula
 typedef enum {
-    MENU_SAIR = 0,
-    MENU_JOGAR = 1,
-    MENU_AJUDA = 2
+    MENU_SAIR = 0,    // Opção para sair do programa
+    MENU_JOGAR = 1,   // Opção para jogar
+    MENU_AJUDA = 2    // Opção para ver ajuda
 } OpcaoMenu;
 
-// Estrutura para armazenar os dados da aposta
+// Estrutura para armazenar os dados da aposta - ainda estou aprendendo structs!
 typedef struct {
-    int dezenas[MAX_DEZENAS];
-    int quantidade;
-    char tipo;  // 'M' para manual, 'S' para surpresinha
+    int dezenas[MAX_DEZENAS];  // Array para guardar os números escolhidos
+    int quantidade;            // Quantas dezenas foram escolhidas
+    char tipo;                 // 'M' para manual, 'S' para surpresinha
 } Aposta;
 
-// Estrutura para armazenar os resultados
+// Estrutura para armazenar os resultados - achei legal usar structs para organizar os dados
 typedef struct {
-    int dezenas_sorteadas[6];
-    int acertos;
-    double premio;
+    int dezenas_sorteadas[6];  // Os 6 números sorteados
+    int acertos;               // Quantos números o jogador acertou
+    double premio;             // Valor do prêmio ganho
 } Resultado;
 
 // Funções locais do menu
-void exibirBanner();
-OpcaoMenu exibirMenu();
-void exibirAjuda();
-void realizarSimulacao();
-void coletarApostas(Aposta apostas[], int *total_apostas, int *qd, int *qt);
-void processarSorteios(Aposta apostas[], int total_apostas, int qd, int qt, double *valor_total, double *premio_total);
-void exibirResultados(double valor_total, double premio_total);
+void exibirBanner();  // Função para mostrar o banner bonito do jogo
+OpcaoMenu exibirMenu();  // Função para mostrar o menu e retornar a opção escolhida
+void exibirAjuda();  // Função para mostrar as regras do jogo
+void realizarSimulacao();  // Função principal que faz toda a simulação
+void coletarApostas(Aposta apostas[], int *total_apostas, int *qd, int *qt);  // Função para pegar as apostas do usuário
+void processarSorteios(Aposta apostas[], int total_apostas, int qd, int qt, double *valor_total, double *premio_total);  // Função para fazer os sorteios
+void exibirResultados(double valor_total, double premio_total);  // Função para mostrar os resultados finais
 
 int main() {
+    // Inicializa a semente para números aleatórios - aprendi isso na aula de algoritmos!
     srand(time(NULL));
     
+    // Variável para guardar a opção do usuário
     OpcaoMenu opcao;
+    
+    // Loop do-while para repetir o menu até o usuário escolher sair
+    // O professor disse que é melhor que o while normal pois executa pelo menos uma vez
     do {
+        // Mostra o banner bonito que fiz
         exibirBanner();
+        
+        // Pega a opção que o usuário escolheu
         opcao = exibirMenu();
         
+        // Estrutura switch-case para tratar as diferentes opções
+        // Estou aprendendo ainda a usar, mas achei melhor que vários if-else
         switch (opcao) {
-            case MENU_JOGAR:
+            case MENU_JOGAR:  // Se escolheu jogar
                 realizarSimulacao();
                 break;
-            case MENU_AJUDA:
+            case MENU_AJUDA:  // Se escolheu ver a ajuda
                 exibirAjuda();
                 break;
-            case MENU_SAIR:
+            case MENU_SAIR:   // Se escolheu sair
                 printf("\nObrigado por utilizar o Simulador da Mega-Sena!\n");
                 break;
         }
-    } while (opcao != MENU_SAIR);
+    } while (opcao != MENU_SAIR);  // Continua até o usuário escolher sair
     
+    // Devolve 0 para o sistema operacional, indicando que tudo deu certo
     return 0;
 }
 
@@ -117,8 +130,8 @@ void realizarSimulacao() {
     double valor_total = 0.0, premio_total = 0.0;
     
     coletarApostas(apostas, &total_apostas, &qd, &qt);
-    
-    // Tabela de valores baseada na quantidade de dezenas
+      // Tabela de valores baseada na quantidade de dezenas
+    // Aprendi a usar arrays para guardar esses valores - muito melhor que vários if-else!
     const double valores[] = {5, 35, 140, 420, 1050, 2310, 4620, 8580, 15015, 25025};
     valor_total = calcularValorAposta(qt == 0 ? 1 : qt, valores[qd - 6], total_apostas);
     
@@ -184,9 +197,14 @@ void coletarApostas(Aposta apostas[], int *total_apostas, int *qd, int *qt) {
 
 // Processa os sorteios e calcula prêmios
 void processarSorteios(Aposta apostas[], int total_apostas, int qd, int qt, double *valor_total, double *premio_total) {
+    // Valores dos prêmios para sena, quina e quadra - números bem grandes!
     const double premios[] = {118265926.76, 32797.02, 834.93};
+    
+    // Se qt for 0, considera só um concurso
+    // Usei operador ternário que aprendi recentemente na aula!
     int num_concursos = (qt == 0) ? 1 : qt;
     
+    // Inicializa o prêmio total com zero
     *premio_total = 0.0;
     
     for (int c = 1; c <= num_concursos; c++) {
